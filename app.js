@@ -4,10 +4,9 @@ const http = require('http').createServer(app)
 const cors = require('cors')
 const PORT = process.env.PORT || 3000
 const io = require('socket.io')(http)
-
+const random = require('./helpers/random')
 
 const player = []
-const random = [37, 38, 39, 40]
 let id
 
 app.use(cors())
@@ -17,19 +16,22 @@ app.use(express.json())
 io.on('connection', (socket) => {
   id = socket.id
 
+  io.emit('GET_RANDOM_QUESTION', random())
+
+  socket.emit('GET_RANDOM_QUESTION', random())
+
   socket.on('newPlayer', (payload) => {
     player.push({
       id: id,
-      nama: payload.nama,
+      nama: payload.name,
       point: payload.point
     })
     console.log(player)
-    io.emit('playerProfile', player)
+    io.emit('GET_DATA_PLAYER', player)
   })
 
-  socket.on('startGame', () => {
-    const i = Math.floor(Math.random() * random.length - 1)
-    io.emit('gamePlay', random[i])
+  socket.on('addPoint', (num) => {
+    console.log(num)
   })
 })
 
