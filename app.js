@@ -6,11 +6,12 @@ const PORT = process.env.PORT || 3000
 const io = require('socket.io')(http)
 
 app.use(cors())
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-io.on('connection', (socket)=>{
-  console.log('a user connected')
+io.on('connection', (socket) => {
+
+  socket.on('register', payload)
 })
 
 http.listen(PORT, () => console.log(`listen on ${PORT}`))
