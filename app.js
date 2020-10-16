@@ -14,14 +14,12 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
 io.on('connection', (socket)=>{
-  // console.log(socket.conn.server)
   console.log('a user connected')
   socket.emit('register', {message: 'ini dari server'})
 
   socket.on('newPlayer', (payload) => {
     payload.userID = socket.id
     player.push(payload)
-    // console.log(player)
     io.emit('playerProfile', player)
   })
 
@@ -38,7 +36,6 @@ io.on('connection', (socket)=>{
       if (user.userID === id) {
         user.point ++
         if(user.point >= 5){
-          console.log('udah lima')
           io.emit('gameOver', user.name)
           player = []
           gameover = true
